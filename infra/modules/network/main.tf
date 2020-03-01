@@ -32,9 +32,14 @@ resource "aws_network_acl" "exposed" {
   }
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_subnet" "public_subnet_a" {
+  availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id     = aws_vpc.exposed.id
-  cidr_block = "10.0.1.0/24"
+  cidr_block = "10.0.0.0/24"
 
   tags = {
     Name = "public subnet A"
@@ -42,8 +47,9 @@ resource "aws_subnet" "public_subnet_a" {
 }
 
 resource "aws_subnet" "public_subnet_b" {
+  availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id     = aws_vpc.exposed.id
-  cidr_block = "10.0.2.0/24"
+  cidr_block = "10.0.1.0/24"
 
   tags = {
     Name = "public subnet B"
