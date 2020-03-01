@@ -3,5 +3,5 @@ include {
 }
 
 terraform {
-  source = "../../modules/storage"
+  source = "../../modules/network"
 }
