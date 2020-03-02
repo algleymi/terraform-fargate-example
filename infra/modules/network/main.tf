@@ -1,8 +1,8 @@
 resource "aws_vpc" "exposed" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.cidr_block
 
   tags = {
-    Name = "exposed"
+    Name = var.application_name
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_network_acl" "exposed" {
   }
 
   tags = {
-    Name = "exposed"
+    Name = var.application_name
   }
 }
 
@@ -39,20 +39,20 @@ data "aws_availability_zones" "available" {
 resource "aws_subnet" "public_subnet_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id     = aws_vpc.exposed.id
-  cidr_block = "10.0.0.0/24"
+  cidr_block = var.cidr_block_public_subnet_a
 
   tags = {
-    Name = "public subnet A"
+    Name = "${var.application_name} public subnet A"
   }
 }
 
 resource "aws_subnet" "public_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id     = aws_vpc.exposed.id
-  cidr_block = "10.0.1.0/24"
+  cidr_block = var.cidr_block_public_subnet_b
 
   tags = {
-    Name = "public subnet B"
+    Name = "${var.application_name} public subnet B"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.exposed.id
 
   tags = {
-    Name = "exposed internet gateway"
+    Name = "${var.application_name} internet gateway"
   }
 }
 
@@ -73,7 +73,7 @@ resource "aws_route_table" "public_route_table" {
   }
 
   tags = {
-    Name = "exposed public routetable"
+    Name = "${var.application_name} public routetable"
   }
 }
 
@@ -96,27 +96,27 @@ resource "aws_nat_gateway" "nat_gw" {
   subnet_id     = aws_subnet.public_subnet_a.id
 
   tags = {
-    Name = "exposed NAT"
+    Name = "${var.application_name} NAT"
   }
 }
 
 resource "aws_subnet" "private_subnet_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id     = aws_vpc.exposed.id
-  cidr_block = "10.0.10.0/24"
+  cidr_block = var.cidr_block_private_subnet_a
 
   tags = {
-    Name = "private subnet A"
+    Name = "${var.application_name} private subnet A"
   }
 }
 
 resource "aws_subnet" "private_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id     = aws_vpc.exposed.id
-  cidr_block = "10.0.11.0/24"
+  cidr_block = var.cidr_block_private_subnet_b
 
   tags = {
-    Name = "private subnet B"
+    Name = "${var.application_name} private subnet B"
   }
 }
 
@@ -129,7 +129,7 @@ resource "aws_route_table" "private_route_table" {
   }
 
   tags = {
-    Name = "exposed private routetable"
+    Name = "${var.application_name} private routetable"
   }
 }
 
