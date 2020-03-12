@@ -2,8 +2,17 @@ resource "aws_vpc" "exposed" {
   cidr_block = var.cidr_block
 
   tags = {
-    Name = var.application_name
+    Name = var.identifier
   }
+}
+
+output "vpc_id" {
+  value = aws_vpc.exposed.id
+}
+
+variable "cidr_block" {
+  type    = string
+  default = "10.0.0.0/16"
 }
 
 resource "aws_network_acl" "exposed" {
@@ -28,8 +37,12 @@ resource "aws_network_acl" "exposed" {
   }
 
   tags = {
-    Name = var.application_name
+    Name = var.identifier
   }
+}
+
+output "network_acl_id" {
+  value = aws_network_acl.exposed
 }
 
 data "aws_availability_zones" "available" {
@@ -38,29 +51,39 @@ data "aws_availability_zones" "available" {
 
 resource "aws_subnet" "public_subnet_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
-  vpc_id     = aws_vpc.exposed.id
-  cidr_block = var.cidr_block_public_subnet_a
+  vpc_id            = aws_vpc.exposed.id
+  cidr_block        = var.cidr_block_public_subnet_a
 
   tags = {
-    Name = "${var.application_name} public subnet A"
+    Name = "${var.identifier} public subnet A"
   }
+}
+
+variable "cidr_block_public_subnet_a" {
+  type    = string
+  default = "10.0.0.0/24"
 }
 
 resource "aws_subnet" "public_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
-  vpc_id     = aws_vpc.exposed.id
-  cidr_block = var.cidr_block_public_subnet_b
+  vpc_id            = aws_vpc.exposed.id
+  cidr_block        = var.cidr_block_public_subnet_b
 
   tags = {
-    Name = "${var.application_name} public subnet B"
+    Name = "${var.identifier} public subnet B"
   }
+}
+
+variable "cidr_block_public_subnet_b" {
+  type    = string
+  default = "10.0.1.0/24"
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.exposed.id
 
   tags = {
-    Name = "${var.application_name} internet gateway"
+    Name = "${var.identifier} internet gateway"
   }
 }
 
@@ -73,7 +96,7 @@ resource "aws_route_table" "public_route_table" {
   }
 
   tags = {
-    Name = "${var.application_name} public routetable"
+    Name = "${var.identifier} public routetable"
   }
 }
 
@@ -96,28 +119,38 @@ resource "aws_nat_gateway" "nat_gw" {
   subnet_id     = aws_subnet.public_subnet_a.id
 
   tags = {
-    Name = "${var.application_name} NAT"
+    Name = "${var.identifier} NAT"
   }
 }
 
 resource "aws_subnet" "private_subnet_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
-  vpc_id     = aws_vpc.exposed.id
-  cidr_block = var.cidr_block_private_subnet_a
+  vpc_id            = aws_vpc.exposed.id
+  cidr_block        = var.cidr_block_private_subnet_a
 
   tags = {
-    Name = "${var.application_name} private subnet A"
+    Name = "${var.identifier} private subnet A"
   }
+}
+
+variable "cidr_block_private_subnet_a" {
+  type    = string
+  default = "10.0.10.0/24"
 }
 
 resource "aws_subnet" "private_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
-  vpc_id     = aws_vpc.exposed.id
-  cidr_block = var.cidr_block_private_subnet_b
+  vpc_id            = aws_vpc.exposed.id
+  cidr_block        = var.cidr_block_private_subnet_b
 
   tags = {
-    Name = "${var.application_name} private subnet B"
+    Name = "${var.identifier} private subnet B"
   }
+}
+
+variable "cidr_block_private_subnet_b" {
+  type    = string
+  default = "10.0.11.0/24"
 }
 
 resource "aws_route_table" "private_route_table" {
@@ -129,7 +162,7 @@ resource "aws_route_table" "private_route_table" {
   }
 
   tags = {
-    Name = "${var.application_name} private routetable"
+    Name = "${var.identifier} private routetable"
   }
 }
 
@@ -141,4 +174,11 @@ resource "aws_route_table_association" "private_subnet_a_route_table" {
 resource "aws_route_table_association" "private_subnet_b_route_table" {
   subnet_id      = aws_subnet.private_subnet_b.id
   route_table_id = aws_route_table.private_route_table.id
+}
+
+output "public_subnet_ids" {
+  value = [
+    aws_subnet.public_subnet_a.id,
+    aws_subnet.public_subnet_b.id
+  ]
 }
