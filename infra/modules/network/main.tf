@@ -6,15 +6,6 @@ resource "aws_vpc" "exposed" {
   }
 }
 
-output "vpc_id" {
-  value = aws_vpc.exposed.id
-}
-
-variable "cidr_block" {
-  type    = string
-  default = "10.0.0.0/16"
-}
-
 resource "aws_network_acl" "exposed" {
   vpc_id = aws_vpc.exposed.id
 
@@ -41,10 +32,6 @@ resource "aws_network_acl" "exposed" {
   }
 }
 
-output "network_acl_id" {
-  value = aws_network_acl.exposed
-}
-
 data "aws_availability_zones" "available" {
   state = "available"
 }
@@ -59,11 +46,6 @@ resource "aws_subnet" "public_subnet_a" {
   }
 }
 
-variable "cidr_block_public_subnet_a" {
-  type    = string
-  default = "10.0.0.0/24"
-}
-
 resource "aws_subnet" "public_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id            = aws_vpc.exposed.id
@@ -72,11 +54,6 @@ resource "aws_subnet" "public_subnet_b" {
   tags = {
     Name = "${var.identifier} public subnet B"
   }
-}
-
-variable "cidr_block_public_subnet_b" {
-  type    = string
-  default = "10.0.1.0/24"
 }
 
 resource "aws_internet_gateway" "gw" {
@@ -133,11 +110,6 @@ resource "aws_subnet" "private_subnet_a" {
   }
 }
 
-variable "cidr_block_private_subnet_a" {
-  type    = string
-  default = "10.0.10.0/24"
-}
-
 resource "aws_subnet" "private_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
   vpc_id            = aws_vpc.exposed.id
@@ -146,11 +118,6 @@ resource "aws_subnet" "private_subnet_b" {
   tags = {
     Name = "${var.identifier} private subnet B"
   }
-}
-
-variable "cidr_block_private_subnet_b" {
-  type    = string
-  default = "10.0.11.0/24"
 }
 
 resource "aws_route_table" "private_route_table" {
@@ -174,11 +141,4 @@ resource "aws_route_table_association" "private_subnet_a_route_table" {
 resource "aws_route_table_association" "private_subnet_b_route_table" {
   subnet_id      = aws_subnet.private_subnet_b.id
   route_table_id = aws_route_table.private_route_table.id
-}
-
-output "public_subnet_ids" {
-  value = [
-    aws_subnet.public_subnet_a.id,
-    aws_subnet.public_subnet_b.id
-  ]
 }

@@ -1,5 +1,5 @@
 resource aws_lb "lb" {
-  name_prefix        = "${var.identifier}-lb"
+  name               = "${var.identifier}-lb"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]
   subnets            = var.lb_subnets
@@ -7,14 +7,6 @@ resource aws_lb "lb" {
   tags = {
     Environment = "${var.identifier}"
   }
-}
-
-variable "lb_subnets" {
-  type = list
-}
-
-output "lb_id" {
-  value = aws_lb.lb.id
 }
 
 resource "aws_security_group" "lb_sg" {
@@ -40,8 +32,4 @@ resource "aws_security_group" "lb_sg" {
   tags = {
     Name = "${var.identifier}-public-lb"
   }
-}
-
-variable "vpc_id" {
-  type = string
 }
