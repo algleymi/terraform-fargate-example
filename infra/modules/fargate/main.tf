@@ -8,7 +8,7 @@ resource "aws_security_group" "allow_tls" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    // TODO: limit this to the loadbalancer!
+    // TODO: limit this to the loadbalancer
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -29,7 +29,7 @@ resource "aws_ecs_service" "ecs_service" {
   name            = "${var.identifier}-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
-  desired_count   = 1
+  desired_count   = var.instance_count
   launch_type = "FARGATE"
 
   load_balancer {
@@ -71,6 +71,7 @@ resource "aws_lb_target_group" "target_group" {
 
 resource "aws_lb_listener_rule" "exposed_role" {
   listener_arn = var.lb_http_listener_arn
+  // TODO: figure out of there's a more elegant way in adding listener rules to a LB
   priority     = 101
 
   action {

@@ -17,6 +17,11 @@ variable "lb_http_listener_arn" {
   type = string
 }
 
+variable "instance_count" {
+  type = number
+  default = 1
+}
+
 variable "subnets" {
   type = list
 }
