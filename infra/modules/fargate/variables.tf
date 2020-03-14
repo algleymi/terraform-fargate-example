@@ -18,7 +18,7 @@ variable "lb_http_listener_arn" {
 }
 
 variable "instance_count" {
-  type = number
+  type    = number
   default = 1
 }
 

@@ -22,14 +22,14 @@ dependency "loadbalancer" {
   config_path = "../loadbalancer"
 
   mock_outputs = {
-    lb_id = "exposed-mock-lb-id"
+    lb_id                = "exposed-mock-lb-id"
     lb_http_listener_arn = "exposed-mock-lb-http-listener-arn"
   }
 }
 
 inputs = {
-  vpc_id = dependency.network.outputs.vpc_id,
+  vpc_id               = dependency.network.outputs.vpc_id,
   lb_http_listener_arn = dependency.loadbalancer.outputs.lb_http_listener_arn,
-  subnets = dependency.network.outputs.private_subnet_ids
-  instance_count = 3
+  subnets              = dependency.network.outputs.private_subnet_ids
+  instance_count       = 3
 }

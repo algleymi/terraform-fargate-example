@@ -30,7 +30,7 @@ resource "aws_ecs_service" "ecs_service" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.task_definition.arn
   desired_count   = var.instance_count
-  launch_type = "FARGATE"
+  launch_type     = "FARGATE"
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group.arn
@@ -72,7 +72,7 @@ resource "aws_lb_target_group" "target_group" {
 resource "aws_lb_listener_rule" "exposed_role" {
   listener_arn = var.lb_http_listener_arn
   // TODO: figure out of there's a more elegant way in adding listener rules to a LB
-  priority     = 101
+  priority = 101
 
   action {
     type             = "forward"
