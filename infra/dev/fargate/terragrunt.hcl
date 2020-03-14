@@ -31,4 +31,5 @@ inputs = {
   vpc_id = dependency.network.outputs.vpc_id,
   lb_http_listener_arn = dependency.loadbalancer.outputs.lb_http_listener_arn,
   subnets = dependency.network.outputs.private_subnet_ids
+  instance_count = 3
 }
