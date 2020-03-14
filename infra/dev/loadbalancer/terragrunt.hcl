@@ -21,5 +21,5 @@ terraform {
 
 inputs = {
   vpc_id = dependency.network.outputs.vpc_id
-  lb_subnets = dependency.network.outputs.private_subnet_ids
+  lb_subnets = dependency.network.outputs.public_subnet_ids
 }
