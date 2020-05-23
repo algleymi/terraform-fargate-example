@@ -51,9 +51,24 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.identifier}-cluster"
 }
 
+module "app_container_definition" {
+  source           = "git@github.com:cloudposse/terraform-aws-ecs-container-definition?ref=0.24.0"
+  container_image  = "arnoschutijzer/exposed:latest"
+  container_name   = "exposed-app"
+  container_cpu    = 256
+  container_memory = 512
+  essential        = true
+  port_mappings = [
+    {
+      containerPort = 80
+      hostPort      = 80
+    }
+  ]
+}
+
 resource "aws_ecs_task_definition" "task_definition" {
   family                   = "${var.identifier}-td"
-  container_definitions    = file("./app.taskdefinition.json")
+  container_definitions    = "[${module.app_container_definition.json_map}]"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
