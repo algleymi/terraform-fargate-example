@@ -3,7 +3,3 @@ terraform {
     aws = "~> 2.53"
   }
 }
-
-provider "aws" {
-  region = var.region
-}
