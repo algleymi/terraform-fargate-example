@@ -33,7 +33,7 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type     = "FARGATE"
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.target_group.arn
+    target_group_arn = var.target_group_arn
     container_name   = "exposed-app"
     container_port   = 80
   }
@@ -62,6 +62,7 @@ module "app_container_definition" {
     {
       containerPort = 80
       hostPort      = 80
+      protocol      = "tcp"
     }
   ]
 }
@@ -73,30 +74,4 @@ resource "aws_ecs_task_definition" "task_definition" {
   cpu                      = 256
   memory                   = 512
   network_mode             = "awsvpc"
-}
-
-resource "aws_lb_target_group" "target_group" {
-  name        = "tf-example-lb-tg"
-  port        = 80
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = var.vpc_id
-}
-
-
-resource "aws_lb_listener_rule" "exposed_role" {
-  listener_arn = var.lb_http_listener_arn
-  # TODO: figure out of there's a more elegant way in adding listener rules to a LB
-  priority = 101
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group.arn
-  }
-
-  condition {
-    host_header {
-      values = var.host_headers
-    }
-  }
 }
