@@ -5,7 +5,7 @@ resource aws_lb "lb" {
   subnets            = var.lb_subnets
 
   tags = {
-    Environment = "${var.identifier}"
+    Environment = var.identifier
   }
 }
 
