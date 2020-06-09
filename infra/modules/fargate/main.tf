@@ -24,7 +24,6 @@ resource "aws_security_group" "allow_tls" {
   }
 }
 
-
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.identifier}-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
@@ -45,7 +44,6 @@ resource "aws_ecs_service" "ecs_service" {
     ]
   }
 }
-
 
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = "${var.identifier}-cluster"
