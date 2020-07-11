@@ -1,9 +1,8 @@
-# terragrunt-fargate-example
+# terraform-fargate-example
 using terraform to spin up a fargate ECS cluster
 
 ## pre-requisites
 - AWS cli
-- terragrunt
 - terraform
 
 ## running it
@@ -13,8 +12,8 @@ using terraform to spin up a fargate ECS cluster
 $ cd infra/dev
 
 # check what will be provisioned
-$ terragrunt plan-all
+$ terraform plan
 
 # provision it!
-$ terragrunt apply-all
+$ terraform apply
 ```
