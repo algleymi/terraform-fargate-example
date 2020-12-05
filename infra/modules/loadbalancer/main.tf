@@ -53,6 +53,8 @@ resource "aws_lb_target_group" "target_group" {
   depends_on = [
     aws_lb.lb
   ]
+  deregistration_delay = 5
+
   name        = "tf-example-lb-tg"
   port        = 80
   protocol    = "HTTP"
