@@ -50,8 +50,9 @@ resource "aws_ecs_service" "ecs_service" {
 
   // ignore any and all changes to the task definition since
   // this needs to be triggered by the ECS deployment pipeline
-  // or via the CLI through `aws ecs update-service --cluster exposed-cluster --service exposed-service \
-  //--task-definition arn:aws:ecs:eu-west-1:062988671883:task-definition/exposed-td:22`
+  // or via the CLI through
+  // aws ecs update-service --cluster exposed-cluster --service exposed-service \
+  // --task-definition $(terraform output -json | jq -r ".task_definition_arn.value")
   lifecycle {
     ignore_changes = [ task_definition ]
   }
