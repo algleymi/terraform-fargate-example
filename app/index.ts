@@ -1,9 +1,10 @@
-import express = require('express')
-import uuid = require('uuid');
+import http from 'http';
+import express from 'express';
+import { v4 } from 'uuid';
 
 const app: express.Application = express()
 const PORT: number = 80
-const id = uuid.v4()
+const id = v4()
 
 app.get('/', (req, res) => {
   res.send(process.env)
