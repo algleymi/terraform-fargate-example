@@ -16,4 +16,7 @@ $ terraform plan
 
 # provision it!
 $ terraform apply
+
+# deploy it!
+$ aws ecs update-service --cluster exposed-cluster --service exposed-service --task-definition $(terraform output -json | jq -r ".task_definition_arn.value")
 ```
