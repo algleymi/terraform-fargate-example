@@ -1,3 +1,7 @@
+locals {
+  container_name = "exposed-app"
+}
+
 resource "aws_security_group" "allow_tls" {
   name        = "allow_tls"
   description = "Allow TLS inbound traffic"
@@ -33,7 +37,7 @@ resource "aws_ecs_service" "ecs_service" {
 
   load_balancer {
     target_group_arn = var.target_group_arn
-    container_name   = "exposed-app"
+    container_name   = local.container_name
     container_port   = 80
   }
 
@@ -43,6 +47,14 @@ resource "aws_ecs_service" "ecs_service" {
       aws_security_group.allow_tls.id
     ]
   }
+
+  // ignore any and all changes to the task definition since
+  // this needs to be triggered by the ECS deployment pipeline
+  // or via the CLI through `aws ecs update-service --cluster exposed-cluster --service exposed-service \
+  //--task-definition arn:aws:ecs:eu-west-1:062988671883:task-definition/exposed-td:22`
+  lifecycle {
+    ignore_changes = [ task_definition ]
+  }
 }
 
 resource "aws_ecs_cluster" "ecs_cluster" {
@@ -51,7 +63,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 module "app_container_definition" {
   source           = "git@github.com:cloudposse/terraform-aws-ecs-container-definition"
-  container_image  = "arnoschutijzer/exposed:latest"
+  container_image  = "arnoschutijzer/exposed"
   container_name   = "exposed-app"
   container_cpu    = 256
   container_memory = 512
@@ -61,6 +73,13 @@ module "app_container_definition" {
       containerPort = 80
       hostPort      = 80
       protocol      = "tcp"
+    }
+  ]
+
+  environment = [
+    {
+      name = "SOME"
+      value = "THING"
     }
   ]
 }
