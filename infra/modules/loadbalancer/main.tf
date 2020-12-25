@@ -64,8 +64,6 @@ resource "aws_lb_target_group" "target_group" {
 
 resource "aws_lb_listener_rule" "exposed_listener_rule" {
   listener_arn = aws_lb_listener.http_listener.arn
-  # TODO: figure out of there's a more elegant way in adding listener rules to a LB
-  priority = 101
 
   action {
     type             = "forward"
