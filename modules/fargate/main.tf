@@ -1,5 +1,5 @@
 locals {
-  container_name = "application"
+  container_name   = "application"
   application_port = 80
 }
 
@@ -55,7 +55,7 @@ resource "aws_ecs_service" "ecs_service" {
   // aws ecs update-service --cluster example-cluster --service example-service \
   // --task-definition $(terraform output -json | jq -r ".task_definition_arn.value")
   lifecycle {
-    ignore_changes = [ task_definition ]
+    ignore_changes = [task_definition]
   }
 }
 
@@ -80,7 +80,7 @@ module "app_container_definition" {
 
   environment = [
     {
-      name = "PORT"
+      name  = "PORT"
       value = local.application_port
     }
   ]

@@ -4,7 +4,7 @@ variable "identifier" {
 }
 
 variable "lb_subnets" {
-  type = list
+  type = list(any)
 }
 
 variable "vpc_id" {
@@ -12,7 +12,7 @@ variable "vpc_id" {
 }
 
 variable "host_headers" {
-  type = list
+  type = list(any)
   default = [
     "example.arnoschutijzer.io"
   ]

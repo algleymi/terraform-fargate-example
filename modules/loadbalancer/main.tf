@@ -1,4 +1,4 @@
-resource aws_lb "lb" {
+resource "aws_lb" "lb" {
   name               = "${var.identifier}-lb"
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]

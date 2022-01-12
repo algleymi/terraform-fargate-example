@@ -14,7 +14,7 @@ variable "instance_count" {
 }
 
 variable "subnets" {
-  type = list
+  type = list(any)
 }
 
 variable "target_group_arn" {
