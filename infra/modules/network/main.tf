@@ -1,4 +1,4 @@
-resource "aws_vpc" "exposed" {
+resource "aws_vpc" "example" {
   cidr_block = var.cidr_block
 
   tags = {
@@ -6,8 +6,8 @@ resource "aws_vpc" "exposed" {
   }
 }
 
-resource "aws_network_acl" "exposed" {
-  vpc_id = aws_vpc.exposed.id
+resource "aws_network_acl" "example" {
+  vpc_id = aws_vpc.example.id
 
   egress {
     protocol   = "-1"
@@ -38,7 +38,7 @@ data "aws_availability_zones" "available" {
 
 resource "aws_subnet" "public_subnet_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
-  vpc_id            = aws_vpc.exposed.id
+  vpc_id            = aws_vpc.example.id
   cidr_block        = var.cidr_block_public_subnet_a
 
   tags = {
@@ -48,7 +48,7 @@ resource "aws_subnet" "public_subnet_a" {
 
 resource "aws_subnet" "public_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
-  vpc_id            = aws_vpc.exposed.id
+  vpc_id            = aws_vpc.example.id
   cidr_block        = var.cidr_block_public_subnet_b
 
   tags = {
@@ -57,7 +57,7 @@ resource "aws_subnet" "public_subnet_b" {
 }
 
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.exposed.id
+  vpc_id = aws_vpc.example.id
 
   tags = {
     Name = "${var.identifier} internet gateway"
@@ -65,7 +65,7 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.exposed.id
+  vpc_id = aws_vpc.example.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -102,7 +102,7 @@ resource "aws_nat_gateway" "nat_gw" {
 
 resource "aws_subnet" "private_subnet_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
-  vpc_id            = aws_vpc.exposed.id
+  vpc_id            = aws_vpc.example.id
   cidr_block        = var.cidr_block_private_subnet_a
 
   tags = {
@@ -112,7 +112,7 @@ resource "aws_subnet" "private_subnet_a" {
 
 resource "aws_subnet" "private_subnet_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
-  vpc_id            = aws_vpc.exposed.id
+  vpc_id            = aws_vpc.example.id
   cidr_block        = var.cidr_block_private_subnet_b
 
   tags = {
@@ -121,7 +121,7 @@ resource "aws_subnet" "private_subnet_b" {
 }
 
 resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.exposed.id
+  vpc_id = aws_vpc.example.id
 
   route {
     cidr_block = "0.0.0.0/0"

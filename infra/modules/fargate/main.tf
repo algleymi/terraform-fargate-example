@@ -1,5 +1,6 @@
 locals {
-  container_name = "exposed-app"
+  container_name = "application"
+  application_port = 80
 }
 
 resource "aws_security_group" "allow_tls" {
@@ -19,7 +20,7 @@ resource "aws_security_group" "allow_tls" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -51,7 +52,7 @@ resource "aws_ecs_service" "ecs_service" {
   // ignore any and all changes to the task definition since
   // this needs to be triggered by the ECS deployment pipeline
   // or via the CLI through
-  // aws ecs update-service --cluster exposed-cluster --service exposed-service \
+  // aws ecs update-service --cluster example-cluster --service example-service \
   // --task-definition $(terraform output -json | jq -r ".task_definition_arn.value")
   lifecycle {
     ignore_changes = [ task_definition ]
@@ -64,23 +65,23 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 module "app_container_definition" {
   source           = "git@github.com:cloudposse/terraform-aws-ecs-container-definition"
-  container_image  = "arnoschutijzer/exposed"
-  container_name   = "exposed-app"
+  container_image  = "public.ecr.aws/skryv/hello-world:latest"
+  container_name   = local.container_name
   container_cpu    = 256
   container_memory = 512
   essential        = true
   port_mappings = [
     {
-      containerPort = 80
-      hostPort      = 80
+      containerPort = local.application_port
+      hostPort      = local.application_port
       protocol      = "tcp"
     }
   ]
 
   environment = [
     {
-      name = "SOME"
-      value = "THING"
+      name = "PORT"
+      value = local.application_port
     }
   ]
 }

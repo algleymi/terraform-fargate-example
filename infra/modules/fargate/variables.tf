@@ -1,6 +1,6 @@
 variable "identifier" {
   type    = string
-  default = "exposed"
+  default = "example"
 }
 
 variable "vpc_id" {

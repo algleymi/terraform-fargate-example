@@ -1,6 +1,6 @@
 variable "identifier" {
   type    = string
-  default = "exposed"
+  default = "example"
 }
 
 variable "lb_subnets" {
@@ -14,6 +14,6 @@ variable "vpc_id" {
 variable "host_headers" {
   type = list
   default = [
-    "exposed.arnoschutijzer.io"
+    "example.arnoschutijzer.io"
   ]
 }

@@ -1,9 +1,9 @@
 output "vpc_id" {
-  value = aws_vpc.exposed.id
+  value = aws_vpc.example.id
 }
 
 output "network_acl_id" {
-  value = aws_network_acl.exposed
+  value = aws_network_acl.example
 }
 
 output "public_subnet_ids" {

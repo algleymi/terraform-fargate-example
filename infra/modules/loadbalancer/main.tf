@@ -62,7 +62,7 @@ resource "aws_lb_target_group" "target_group" {
   vpc_id      = var.vpc_id
 }
 
-resource "aws_lb_listener_rule" "exposed_listener_rule" {
+resource "aws_lb_listener_rule" "example_listener_rule" {
   listener_arn = aws_lb_listener.http_listener.arn
 
   action {
