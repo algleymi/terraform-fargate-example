@@ -20,7 +20,7 @@ resource "aws_security_group" "allow_tls" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "tcp"
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -49,7 +49,7 @@ resource "aws_ecs_service" "ecs_service" {
     ]
   }
 
-  // ignore any and all changes to the task definition since
+  // ignore all changes to the task definition since
   // this needs to be triggered by the ECS deployment pipeline
   // or via the CLI through
   // aws ecs update-service --cluster example-cluster --service example-service \
@@ -65,7 +65,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 module "app_container_definition" {
   source           = "git@github.com:cloudposse/terraform-aws-ecs-container-definition"
-  container_image  = "public.ecr.aws/skryv/hello-world:latest"
+  container_image  = "public.ecr.aws/skryv/placeholder:latest"
   container_name   = local.container_name
   container_cpu    = 256
   container_memory = 512
