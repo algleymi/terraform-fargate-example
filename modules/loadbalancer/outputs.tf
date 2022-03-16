@@ -1,3 +1,3 @@
-output "target_group_arn" {
-  value = aws_lb_target_group.target_group.arn
+output "load_balancer_listener_arn" {
+  value = aws_lb_listener.http_listener.arn
 }

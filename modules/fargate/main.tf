@@ -29,6 +29,16 @@ resource "aws_security_group" "allow_tls" {
   }
 }
 
+resource "aws_lb_target_group" "target_group" {
+  deregistration_delay = 1
+
+  name        = "tf-example-lb-tg"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = var.vpc_id
+}
+
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.identifier}-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
@@ -37,7 +47,7 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type     = "FARGATE"
 
   load_balancer {
-    target_group_arn = var.target_group_arn
+    target_group_arn = aws_lb_target_group.target_group.arn
     container_name   = local.container_name
     container_port   = 80
   }
@@ -93,4 +103,19 @@ resource "aws_ecs_task_definition" "task_definition" {
   cpu                      = 256
   memory                   = 512
   network_mode             = "awsvpc"
+}
+
+resource "aws_lb_listener_rule" "example_listener_rule" {
+  listener_arn = var.load_balancer_listener_arn
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group.arn
+  }
+
+  condition {
+    host_header {
+      values = var.host_headers
+    }
+  }
 }

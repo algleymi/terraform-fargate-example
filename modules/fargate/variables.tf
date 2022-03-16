@@ -17,6 +17,13 @@ variable "subnets" {
   type = list(any)
 }
 
-variable "target_group_arn" {
+variable "load_balancer_listener_arn" {
   type = string
+}
+
+variable "host_headers" {
+  type = list(any)
+  default = [
+    "example.arnoschutijzer.io"
+  ]
 }
