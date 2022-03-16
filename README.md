@@ -8,7 +8,7 @@ using terraform to spin up a fargate ECS cluster
 ## running it
 
 ```bash
-# navigate to the dev environment
+# navigate to the environment
 $ cd live
 
 # initialize the thing
