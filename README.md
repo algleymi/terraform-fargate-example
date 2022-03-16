@@ -9,7 +9,10 @@ using terraform to spin up a fargate ECS cluster
 
 ```bash
 # navigate to the dev environment
-$ cd infra/dev
+$ cd live
+
+# initialize the thing
+$ terraform init
 
 # check what will be provisioned
 $ terraform plan
