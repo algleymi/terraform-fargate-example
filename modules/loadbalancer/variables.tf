@@ -10,10 +10,3 @@ variable "lb_subnets" {
 variable "vpc_id" {
   type = string
 }
-
-variable "host_headers" {
-  type = list(any)
-  default = [
-    "example.arnoschutijzer.io"
-  ]
-}

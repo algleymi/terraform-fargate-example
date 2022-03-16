@@ -48,31 +48,3 @@ resource "aws_lb_listener" "http_listener" {
     }
   }
 }
-
-resource "aws_lb_target_group" "target_group" {
-  depends_on = [
-    aws_lb.lb
-  ]
-  deregistration_delay = 1
-
-  name        = "tf-example-lb-tg"
-  port        = 80
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = var.vpc_id
-}
-
-resource "aws_lb_listener_rule" "example_listener_rule" {
-  listener_arn = aws_lb_listener.http_listener.arn
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group.arn
-  }
-
-  condition {
-    host_header {
-      values = var.host_headers
-    }
-  }
-}
