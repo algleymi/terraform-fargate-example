@@ -1,0 +1,20 @@
+FROM golang:1.17.8-alpine AS builder
+
+ENV CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+EXPOSE 8080
+
+WORKDIR /dist
+
+COPY . .
+
+RUN go get -v -t -d ./...
+RUN go build -o application .
+
+FROM scratch
+
+COPY --from=builder /dist/application /
+
+CMD ["/application"]
