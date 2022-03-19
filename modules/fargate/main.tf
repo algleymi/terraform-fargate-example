@@ -1,6 +1,6 @@
 locals {
-  container_name   = "application"
-  application_port = 80
+  container_name = "application"
+  container_port = 80
 }
 
 resource "aws_security_group" "allow_tls" {
@@ -82,8 +82,8 @@ module "app_container_definition" {
   essential        = true
   port_mappings = [
     {
-      containerPort = local.application_port
-      hostPort      = local.application_port
+      containerPort = local.container_port
+      hostPort      = local.container_port
       protocol      = "tcp"
     }
   ]
@@ -91,7 +91,7 @@ module "app_container_definition" {
   environment = [
     {
       name  = "PORT"
-      value = local.application_port
+      value = local.container_port
     }
   ]
 }
