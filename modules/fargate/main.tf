@@ -96,6 +96,17 @@ module "app_container_definition" {
   ]
 }
 
+// A default task definition to be used to first set up the
+// service. This will then be replaced by a different
+// task definition deployed by a pipeline.
+// Not following this setup results in either having to rely
+// on Terraform to do the deployment (which doesn't support
+// blue-green deployment), or having an infinite change loop
+// by using CodeDeploy. In the latter situation, CodeDeploy
+// creates a new task definition ARN that Terraform will be
+// unaware of and Terraform will try to revert the change
+// with the next `apply`.
+// See https://github.com/hashicorp/terraform-provider-aws/issues/632
 resource "aws_ecs_task_definition" "task_definition" {
   family                   = "${var.identifier}-td"
   container_definitions    = module.app_container_definition.json_map_encoded_list
