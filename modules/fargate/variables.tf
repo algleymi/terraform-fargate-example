@@ -1,6 +1,5 @@
 variable "identifier" {
-  type    = string
-  default = "example"
+  type = string
 }
 
 variable "vpc_id" {

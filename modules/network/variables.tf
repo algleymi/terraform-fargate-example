@@ -1,6 +1,5 @@
 variable "identifier" {
   type        = string
-  default     = "example"
   description = "Arbitrary label to tag resources with. Each resource will get this prefix in the tags."
 }
 
