@@ -15,7 +15,7 @@ func CreateServer() *http.Server {
 	router := CreateHandler()
 
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":80",
 		Handler: router,
 	}
 
